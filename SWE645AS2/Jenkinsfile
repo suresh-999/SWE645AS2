@@ -31,9 +31,15 @@ pipeline {
                     sh 'jar -cvf SWE645AS2/SWE645AS2.war -C SWE645AS2/WebContent .'  
                     sh 'echo ${BUILD_TIMESTAMP}'
                     // sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
-                    sh "echo \$DOCKERHUB_PASS | docker login -u suresh999 --password-stdin"
+                   // sh "echo \$DOCKERHUB_PASS | docker login -u suresh999 --password-stdin"
                     //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
-                    def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
+                    // def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
+                    
+                    withCredentials([usernamePassword(credentialsId: 'dockerhubcred', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
+                                 sh "echo \$DOCKERHUB_PASS | docker login --username \$DOCKERHUB_USER --password-stdin"
+                                 sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} ./SWE645AS2"
+                    }
+                    
                     
                     
                 }
