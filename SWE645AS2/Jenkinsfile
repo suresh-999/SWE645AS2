@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_PASS = credentials('satyaveera')
+        DOCKERHUB_PASS = credentials('dockerhubcred')
     }
     stages {
         stage("Building the Student Survey Image") {
