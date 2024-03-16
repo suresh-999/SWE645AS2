@@ -37,7 +37,9 @@ pipeline {
                     
                     withCredentials([usernamePassword(credentialsId: 'dockerhubcred', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                                  sh "echo \$DOCKERHUB_PASS | docker login --username \$DOCKERHUB_USER --password-stdin"
-                                 sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} ./SWE645AS2"
+                                 // sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} ./SWE645AS2"
+                                 sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} -f SWE645AS2/Dockerfile ./SWE645AS2"
+                                 
                     }
                     
                     
