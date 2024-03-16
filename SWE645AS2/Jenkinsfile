@@ -10,20 +10,22 @@ pipeline {
                 script {
                     checkout scm
                     
-                    dir('SWE645AS2/SWE645AS2/') {
+                  //  dir('SWE645AS2/SWE645AS2/') {
                         
-                        sh 'rm -rf *.war'
-                         sh 'jar -cvf SWE645AS2.war -C WebContent/.'
-                         sh 'echo ${BUILD_TIMESTAMP}'
-                         sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
-                        def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
-                    }
+                  //      sh 'rm -rf *.war'
+                  //       sh 'jar -cvf SWE645AS2.war -C WebContent/.'
+                  //       sh 'echo ${BUILD_TIMESTAMP}'
+                  //       sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
+                  //      def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
+                  //  }
                     
-                   // sh 'rm -rf *.war'
-                   // sh 'jar -cvf SWE645AS2.war -C WebContent/.'
-                   // sh 'echo ${BUILD_TIMESTAMP}'
-                   // sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
-                   //  def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
+                    sh 'rm -rf *.war'
+                    //sh 'jar -cvf SWE645AS2.war -C WebContent/.'
+                    sh 'jar -cvf SWE645AS2.war -C SWE645AS2/WebContent/.'
+                    
+                    sh 'echo ${BUILD_TIMESTAMP}'
+                    sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
+                    def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
                     
                 }
             }
