@@ -73,7 +73,10 @@ pipeline {
                // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645'
                // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645'
                 
-                sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest'
+               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest'
+                
+                  sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default'
+                
                 
                // kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645
                 
