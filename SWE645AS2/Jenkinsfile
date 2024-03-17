@@ -66,8 +66,10 @@ pipeline {
             steps {
                 //sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
                // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${DOCKER_TAG} -n jenkins-pipeline'
-                sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey645=suresh999/studentsurvey645:latest -n jenkins-pipeline'
-                sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey645=suresh999/studentsurvey645:latest -n jenkins-pipeline --kubeconfig=/var/lib/jenkins/.kube/config'
+               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey645=suresh999/studentsurvey645:latest -n jenkins-pipeline'
+                sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n jenkins-pipeline'
+                
+               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey645=suresh999/studentsurvey645:latest -n jenkins-pipeline --kubeconfig=/var/lib/jenkins/.kube/config'
                 
             }
         }
