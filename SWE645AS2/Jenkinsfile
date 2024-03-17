@@ -44,7 +44,7 @@ pipeline {
                                  //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP//:/} -f SWE645AS2/Dockerfile ./SWE645AS2"
                                  //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
                                  //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}", "./SWE645AS2")
-                                 def customImage = docker.build("suresh999/studentsurvey645:${DOCKER_TAG}", "./SWE645AS2")
+                                 def customImage = docker.build("suresh999/studentsurvey645:${dateTag}", "./SWE645AS2")
                                  
                     }
                     
@@ -58,7 +58,7 @@ pipeline {
                 script {
                    // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP}"
                    // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}"
-                    sh "docker push suresh999/studentsurvey645:${DOCKER_TAG}"
+                    sh "docker push suresh999/studentsurvey645:${dateTag}"
                     
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
                 
                //   sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default'
                   
-                  sh 'kubectl set image deployment/studentsurvey-pipeline container-0=suresh999/studentsurvey645:latest -n default'
+                  sh 'kubectl set image deployment/studentsurvey-pipeline container-0=suresh999/studentsurvey645:${dateTag} -n default'
                   
                 
                 
