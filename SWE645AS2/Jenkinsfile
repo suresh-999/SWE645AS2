@@ -1,3 +1,11 @@
+// Group Members:
+//  Suresh Ande  (G01381683)
+//  Chandrashakar Gudipally (G01410349)
+//  Abhishek Darana ( G01408181) 
+//  Anjan kumar sripati panditaradhyula (G01407403)
+
+
+
 pipeline {
     agent any
     environment {
@@ -10,87 +18,36 @@ pipeline {
             steps {
                 
                 script {
-                    checkout scm
-                    
-                  //  dir('SWE645AS2/SWE645AS2/') {
-                        
-                  //      sh 'rm -rf *.war'
-                  //       sh 'jar -cvf SWE645AS2.war -C WebContent/.'
-                  //       sh 'echo ${BUILD_TIMESTAMP}'
-                  //       sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
-                  //      def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
-                  //  }
-                    
-
-                                       
+                    checkout scm                     
                     
                     sh 'pwd'
                     sh 'ls -al SWE645AS2/WebContent/'
                     sh 'rm -rf *.war'
-                    //sh 'jar -cvf SWE645AS2.war -C WebContent/.'
-                    //sh 'jar -cvf SWE645AS2.war -C SWE645AS2/WebContent/.'
-                    //sh 'jar -cvf SWE645AS2/SWE645AS2.war -C SWE645AS2/WebContent/.'
                     sh 'jar -cvf SWE645AS2/SWE645AS2.war -C SWE645AS2/WebContent .'  
                     sh 'echo ${BUILD_TIMESTAMP}'
-                    // sh "docker login -u suresh999 -p ${DOCKERHUB_PASS}"
-                   // sh "echo \$DOCKERHUB_PASS | docker login -u suresh999 --password-stdin"
-                    //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}")
-                    // def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
                     
                     withCredentials([usernamePassword(credentialsId: 'dockerhubcred', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                                  sh "echo \$DOCKERHUB_PASS | docker login --username \$DOCKERHUB_USER --password-stdin"
-                                 // sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} ./SWE645AS2"
-                                 //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} -f SWE645AS2/Dockerfile ./SWE645AS2"
-                                 //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP//:/} -f SWE645AS2/Dockerfile ./SWE645AS2"
-                                 //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
-                                 //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}", "./SWE645AS2")
                                  def customImage = docker.build("suresh999/studentsurvey645:${dateTag}", "./SWE645AS2")
                                  
-                    }
-                    
-                    
-                    
+                    }  
                 }
             }
         }
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                   // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP}"
-                   // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}"
                     sh "docker push suresh999/studentsurvey645:${dateTag}"
-                    
                 }
             }
         }
         stage("Deploying to Rancher as single pod") {
-            steps {
-                //sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${DOCKER_TAG} -n jenkins-pipeline'
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey645=suresh999/studentsurvey645:latest -n jenkins-pipeline'
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n jenkins-pipeline'
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n jenkins-pipeline --context swe645'
-               // sh 'kubectl set image deployment/student-survey student-survey=suresh999/studentsurvey645:latest -n jenkins-pipeline --context swe645'
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645'
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645'
-                
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest'
-                
-               //   sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default'
-                  
-                  sh 'kubectl set image deployment/studentsurvey-pipeline container-0=suresh999/studentsurvey645:${dateTag} -n default'
-                  
-                
-                
-               // kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645
-                
-               // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey645=suresh999/studentsurvey645:latest -n jenkins-pipeline --kubeconfig=/var/lib/jenkins/.kube/config'
-                
+            steps {                                  
+                  sh 'kubectl set image deployment/studentsurvey-pipeline container-0=suresh999/studentsurvey645:${dateTag} -n default'         
             }
         }
         stage("Deploying to Rancher with load balancer") {
-            steps {
-                //sh 'kubectl set image deployment/studentsurvey645-lb studentsurvey645-lb=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+            steps { 
                 sh 'kubectl set image deployment/studentsurvey-lb container-0=suresh999/studentsurvey645:${dateTag} -n default'
             }
         }
