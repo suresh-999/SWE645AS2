@@ -40,7 +40,8 @@ pipeline {
                                  // sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} ./SWE645AS2"
                                  //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} -f SWE645AS2/Dockerfile ./SWE645AS2"
                                  //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP//:/} -f SWE645AS2/Dockerfile ./SWE645AS2"
-                                 def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
+                                 //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
+                                 def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}", "./SWE645AS2")
                                  
                                  
                     }
@@ -53,7 +54,9 @@ pipeline {
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                    sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP}"
+                   // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP}"
+                    sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}"
+                    
                 }
             }
         }
