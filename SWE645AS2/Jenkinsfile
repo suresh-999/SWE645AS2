@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_PASS = credentials('dockerhubcred')
+        DOCKER_TAG = "latest"
     }
     stages {
         stage("Building the Student Survey Image") {
@@ -41,8 +42,8 @@ pipeline {
                                  //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP} -f SWE645AS2/Dockerfile ./SWE645AS2"
                                  //sh "docker build -t suresh999/studentsurvey645:${BUILD_TIMESTAMP//:/} -f SWE645AS2/Dockerfile ./SWE645AS2"
                                  //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP}", "./SWE645AS2")
-                                 def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}", "./SWE645AS2")
-                                 
+                                 //def customImage = docker.build("suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}", "./SWE645AS2")
+                                 def customImage = docker.build("suresh999/studentsurvey645:${DOCKER_TAG}", "./SWE645AS2")
                                  
                     }
                     
@@ -55,19 +56,24 @@ pipeline {
             steps {
                 script {
                    // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP}"
-                    sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}"
+                   // sh "docker push suresh999/studentsurvey645:${BUILD_TIMESTAMP.replaceAll(/:/, '-')}"
+                    sh "docker push suresh999/studentsurvey645:${DOCKER_TAG}"
                     
                 }
             }
         }
         stage("Deploying to Rancher as single pod") {
             steps {
-                sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                //sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:${DOCKER_TAG} -n jenkins-pipeline'
+                
             }
         }
         stage("Deploying to Rancher with load balancer") {
             steps {
-                sh 'kubectl set image deployment/studentsurvey645-lb studentsurvey645-lb=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                //sh 'kubectl set image deployment/studentsurvey645-lb studentsurvey645-lb=suresh999/studentsurvey645:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                sh 'kubectl set image deployment/studentsurvey645-lb studentsurvey645-lb=suresh999/studentsurvey645:${DOCKER_TAG} -n jenkins-pipeline'
+                
             }
         }
     }
