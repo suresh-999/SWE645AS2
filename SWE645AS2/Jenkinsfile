@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_PASS = credentials('dockerhubcred')
         DOCKER_TAG = "latest"
+        def dateTag = new Date().format("yyyyMMdd-HHmmss")
     }
     stages {
         stage("Building the Student Survey Image") {
@@ -75,7 +76,10 @@ pipeline {
                 
                // sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest'
                 
-                  sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default'
+               //   sh 'kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default'
+                  
+                  sh 'kubectl set image deployment/studentsurvey-pipeline container-0=suresh999/studentsurvey645:latest -n default'
+                  
                 
                 
                // kubectl set image deployment/studentsurvey-pipeline studentsurvey-pipeline=suresh999/studentsurvey645:latest -n default --context swe645
